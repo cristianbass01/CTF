@@ -1,0 +1,32 @@
+Challenge: UPS delivery (https://trojanc.tf/challenges#UPS%20delivery-10)
+
+My friend gave me this binary. They said they got it through UPS or something?? 
+I didn't know they deliver software now, but thats kinda cool! 
+Anyways, it's a password checking program, but I forgot to ask for the password to test it... 
+Can you help me find it?
+
++ ups file
+
+Solution:
+
+$ strings -n 20 ups
+PROT_EXEC|PROT_WRITE failed.
+$Info: This file is packed with the UPX executable packer http://upx.sf.net $
+$Id: UPX 4.24 Copyright (C) 1996-2024 the UPX Team. All Rights Reserved. $
+
+Following the website, downloading the software upx and extracting it.
+Then we use it to decompress the upd file:
+
+$ ./upx-5.0.1-amd64_linux/upx -d ups -o ups_extracted
+                      Ultimate Packer for eXecutables
+                          Copyright (C) 1996 - 2025
+UPX 5.0.1       Markus Oberhumer, Laszlo Molnar & John Reiser    May 6th 2025
+
+        File size         Ratio      Format      Name
+  --------------------   ------   -----------   -----------
+    758440 <-    265676   35.03%   linux/amd64   ups_extracted
+
+Unpacked 1 file.
+
+$ strings ups_extracted | grep Trojan*
+Trojan{00pS_MAy53_1t_wA5_UPX} 

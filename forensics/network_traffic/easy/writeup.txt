@@ -1,0 +1,17 @@
+Challenge: Knock knock (https://trojanc.tf/challenges#Knock%20knock-8)
+
+Following suspicious activity from one of our company's computers, we recorded its network traffic. 
+Analyzing the resulting file, we noticed that it is communicating with a specific address, but the packets it sends are empty. 
+Our suspicion is that it is trying to secretly send data to this address. 
+Can you confirm this?
+
++ file knock-knock.pcap
+
+Solution: 
+Recover the destination ports since they look suspiciously like integers that can be converted to ascii:
+
+$ tshark -r knock-knock.pcap -T fields -e tcp.dstport | tr '\t' '\n' | grep -E '^[0-9]+$' | awk '{printf "%c", $1}'
+https://pastebin.com/raw/LCLSmQ8F
+
+From the link we find: VHJvamFue2gxZDFuZ18xbmYwXzFuX3AwMjdfbnVtYjMyNX0=
+That is probably base64: Trojan{h1d1ng_1nf0_1n_p027_numb325}
